@@ -38,7 +38,7 @@ const AddTextStyle = styled.div`
 
 function AddButton() {
   const dispatch = useDispatch<AppDispatch>();
-  const [number, setNumber] = useState(200);
+  const [number, setNumber] = useState(100);
   const countData : any = useSelector<RootState>((state) => state.countData);
   const [showMessage, setShowMessage] = useState(false);
   const [showMessage_limit, setShowMessage_limit] = useState(false);
@@ -47,7 +47,7 @@ const addHandler = () => {
 
   //포켓몬 데이터가 1000개 이상이면 더 이상 요청을 보내지 않음
   if(countData <= 900){
-    setNumber((state) => state + 200);
+    setNumber((state) => state + 100);
     setShowMessage(true); // 메시지 보이기
     dispatch(getPokemonData(number));
     setTimeout(() => {

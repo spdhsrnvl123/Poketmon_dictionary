@@ -46,14 +46,15 @@ const LoadingImg = styled.img`
 `
 
 const PokemonListPage = () => {
-  const data = useSelector((state: RootState) => state);
   const dispatch = useDispatch<AppDispatch>();
+  const pokemonData = useSelector((state: RootState) => state.pokemonData);
+  const [filteredData] = useFilter();
+  const mainContentRef = useRef<HTMLDivElement>(null);
+
+
   useEffect(() => {
     dispatch(getPokemonData(0));
   }, []);
-  const [filteredData] = useFilter();
-
-  const mainContentRef = useRef<HTMLDivElement>(null);
 
   const handleScrollToTop = (): void => {
     if (mainContentRef.current) {
@@ -61,17 +62,17 @@ const PokemonListPage = () => {
     }
   };
 
-  useEffect(() => {
-    handleScrollToTop();
-  }, [data.countData]);
+  // useEffect(() => {
+  //   handleScrollToTop();
+  // }, [data.countData]);
 
   return (
     <>
-      {data.pokemonData.status ==="Loading" ? null :<Category />}
+      {pokemonData.status ==="Loading" ? null :<Category />}
       <MainContent>
         <ContentArticle ref={mainContentRef}>
           <ListJob>
-            {data.pokemonData.status === "Loading" ? (
+            {pokemonData.status === "Loading" ? (
               <LoadingImg src={loadingImg} alt="loading" />
             ) : (
               filteredData?.map((value, index) => {

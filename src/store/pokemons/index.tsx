@@ -7,44 +7,38 @@ import {
 import { sortPokemonByName } from "../../utils/sortPokemonByName";
 import { PokemonListResponse } from "../../types/pokemonsSummary";
 
-// 비동기 함수: 포켓몬 데이터를 가져오고 추가 정보를 얻기
+//포켓몬 상세데이터 요청
+const fetchPokemonDetail = async(url: string) : Promise<Pokemon> =>{
+    const pokemonRes = await fetch(url);
+    const pokemonData = await pokemonRes.json();
+
+    // 포켓몬 설명을 가져오기
+    const speciesResponse = await fetch(pokemonData.species.url);
+    const speciesData = await speciesResponse.json();
+    const description = speciesData.flavor_text_entries.find((entry: FlavorTextEntry) => entry.language.name === "en").flavor_text;
+
+    return {
+        name: pokemonData.name, // 포켓몬 이름
+        imageUrl: pokemonData.sprites.front_default, // 포켓몬 이미지
+        id: pokemonData.id, // 포켓몬 ID
+        types: pokemonData.types.map((type: PokemonType) => type.type.name), // 포켓몬 타입들
+        description: description || "No description available",
+    };
+}
+
+// 포켓몬 데이터를 요청
 const getPokemonData = createAsyncThunk<Pokemon[], number>(
   "getData/getPokemonData",
   async (offset) => {
     try {
       // 포켓몬 목록을 가져오기
-      const response = await fetch(
-        `https://pokeapi.co/api/v2/pokemon?limit=200&offset=${offset}`
-      );
-      const data: PokemonListResponse = await response.json();
-
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=100&offset=${offset}`);
+      const data: PokemonListResponse = await res.json();
       // 각 포켓몬 URL을 통해 상세 정보를 가져오기
-      const pokemons = await Promise.all(
-        data.results.map(async (pokemon:any): Promise<Pokemon> => {
-          const pokemonResponse = await fetch(pokemon.url);
-          const pokemonData = await pokemonResponse.json();
+      const pokemons = await Promise.all(data.results.map((pokemon) => fetchPokemonDetail(pokemon.url)));     
 
-          // 포켓몬 설명을 가져오기
-          const speciesResponse = await fetch(pokemonData.species.url);
-          const speciesData = await speciesResponse.json();
-
-          const description = speciesData.flavor_text_entries.find(
-            (entry: FlavorTextEntry) => entry.language.name === "en"
-          ).flavor_text;
-
-          return {
-            name: pokemon.name, // 포켓몬 이름
-            imageUrl: pokemonData.sprites.front_default, // 포켓몬 이미지
-            id: pokemonData.id, // 포켓몬 ID
-            types: pokemonData.types.map((type: PokemonType) => type.type.name), // 포켓몬 타입들
-            description: description || "No description available",
-          };
-        })
-      );
-      
-      //네이밍에 따라 정렬 하는 함수 호출
-      return sortPokemonByName(pokemons); // 정렬된 포켓몬 데이터 반환
-    } catch (error) {
+      return sortPokemonByName(pokemons);
+    } catch(error){
       console.error("Error fetching data:", error);
       throw new Error("Failed to fetch pokemon data"); // 에러 발생 시 처리
     }
@@ -65,7 +59,6 @@ let pokemonData = createSlice({
         state.status = "Loading"; // 데이터 로딩 중
       })
       .addCase(getPokemonData.fulfilled, (state, action) => {
-
         const newPokemons = action.payload.filter(
           (newPokemon) =>
             !state.value.some(
