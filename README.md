@@ -3,20 +3,7 @@
 ## 배포
 https://spdhsrnvl123.github.io/poketmon_dictionary/
 
-## 프로젝트 실행 방법
-1. git clone하여 프로젝트를 내려받습니다.
-    ```bash
-    git clone https://github.com/spdhsrnvl123/poketmon_dictionary.git
-    ```
-2. 패키지를 설치합니다.
-    ```bash
-    npm install
-    ```
-3. 프로젝트를 실행합니다.
-    ```bash
-    npm start
-    ```
-
+Test
 
 ## 기술 스택 및 구현 사항
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/redux-764ABC?style=for-the-badge&logo=redux&logoColor=black"> <img src="https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled components&logoColor=black">
