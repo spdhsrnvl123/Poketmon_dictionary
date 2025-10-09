@@ -1,13 +1,7 @@
-import React from 'react'
 import CategoryButton from '../../components/CategoryButton'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store/store'
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from "swiper/modules";
-
-// Import Swiper styles
 import 'swiper/css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretLeft, faCaretRight } from '@fortawesome/free-solid-svg-icons'
@@ -17,6 +11,7 @@ const CategoryContent = styled.div`
   display: flex;
   max-width: 334px;
   margin: 0 auto;
+  height: 40px;
 `;
 
 const ArrowButton = styled.button`
@@ -41,18 +36,6 @@ const ArrowButton = styled.button`
 
 
 function Category() {
-  const data = useSelector((state: RootState) => state);
-
-  const types2 = data.pokemonData.value.map((value)=>{
-    const typeObj : string[] = []
-    typeObj.push(...value.types);
-
-    return typeObj;
-  })
-
-  const types = Array.from(new Set(types2.flat()));
-
-  
   return (
     <CategoryContent>
       <ArrowButton className="swiper-button-prev">
@@ -69,15 +52,15 @@ function Category() {
         className="mySwiper"
       >
         <SwiperSlide>
-          <CategoryButton type={"All"} />
+          <CategoryButton type="all" />
         </SwiperSlide>
-        {types.map((type) => {
-          return (
-            <SwiperSlide key={type}>
-              <CategoryButton type={type} key={type} />
-            </SwiperSlide>
-          );
-        })}
+        {/* {types.map((type) => { */}
+          {/* return ( */}
+            {/* <SwiperSlide key={type}> */}
+              {/* <CategoryButton type={type} key={type} /> */}
+            {/* </SwiperSlide> */}
+          {/* ); */}
+        {/* })} */}
       </Swiper>
       <ArrowButton className="swiper-button-next">
         <FontAwesomeIcon icon={faCaretRight} />

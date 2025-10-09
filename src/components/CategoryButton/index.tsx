@@ -1,9 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import logo from "../../assets/images/logo.png";
-import { AppDispatch, RootState } from "../../store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setFilterType } from "../../store/search";
 
 const CategoryButtonStyle = styled.button<{ active: boolean }>`
   width: 44px;
@@ -33,22 +30,14 @@ interface CategoryButtonProps {
 }
 
 function CategoryButton({ type }: CategoryButtonProps) {
-  const dispatch = useDispatch<AppDispatch>();
-  const selectedFilterType = useSelector(
-    (state: RootState) => state.searchResults.filterType
-  );
-  const handleCategoryClick = () => {
-    dispatch(setFilterType(type));
-  };
-
   return (
-    <CategoryButtonStyle
-      onClick={handleCategoryClick}
-      active={selectedFilterType === type}
-    >
+    // <CategoryButtonStyle>
+    <>
       <img src={logo} alt="" />
       <span>{type}</span>
-    </CategoryButtonStyle>
+    </>
+
+    // </CategoryButtonStyle>
   );
 }
 

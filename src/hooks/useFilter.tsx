@@ -1,40 +1,36 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { UpdateNumber } from "../store/count";
-import { AppDispatch, RootState } from "../store/store";
+import { useContext, useMemo } from "react";
 import { Pokemon } from "../types/pokemons";
+import { PokemonContext } from "../context/PokemonContext";
 
 export const useFilter = () => {
-  const data = useSelector((state: RootState) => state);
-  const [filteredData, setFilteredData] = useState<Pokemon[] | null>(null);
-  const dispatch = useDispatch<AppDispatch>();
+  const context = useContext(PokemonContext);
 
-  // 검색별 & 타입별 포켓몬 필터링
-  useEffect(() => {
-    const result = data.pokemonData.value.filter((item : Pokemon) => {
-      const keyword = item.name.toLowerCase();
-      const types = item.types;
+  if (!context) {
+    throw new Error("useFilter must be used within PokemonProvider");
+  }
 
-      const matchsKeyword = data.searchResults.keyword.toLowerCase();
-      const matchsType = data.searchResults.filterType;
+  const { data, searchQuery } = context;
 
-      if (matchsKeyword === "" && matchsType === "All") {
-        return item;
-      } else if (types.includes(matchsType) && matchsKeyword === "") {
-        return item;
-      } else if(keyword.includes(matchsKeyword) && matchsType === "All"){
-        return item;
-      } else if(types.includes(matchsType) && keyword.includes(matchsKeyword)){
-        return item;
-      } else {
-        return null;
-      }
+  // 검색별 포켓몬 필터링 (useMemo로 성능 최적화)
+  const filteredData = useMemo(() => {
+    if (!data) return null;
+
+    // 검색어가 없으면 전체 데이터 반환
+    if (!searchQuery.trim()) {
+      return data;
+    }
+
+    // 검색어로 필터링
+    return data.filter((pokemon: Pokemon) => {
+      const pokemonName = pokemon.name.toLowerCase();
+      const searchTerm = searchQuery.toLowerCase();
+      
+      return pokemonName.includes(searchTerm);
     });
-    //검색된 필터링 아이템
-    setFilteredData(result);
-    //검색된 필터링 아이템 카운트
-    dispatch(UpdateNumber(result.length));
-  }, [data]);
+  }, [data, searchQuery]); // data나 searchQuery 변경 시 재계산
 
-  return [filteredData];
+  return {
+    filteredData,
+    count: filteredData?.length || 0,
+  };
 };

@@ -14,7 +14,7 @@ const StyledInput = styled.input`
   outline: none;
 `;
 
-const ButtonStyle = styled.button`
+const StyledButton = styled.button`
   position: absolute;
   top: 9px;
   right: 18px;
@@ -49,24 +49,26 @@ const ButtonStyle = styled.button`
 `;
 
 const Input = () => {
-  const ref = useRef<HTMLInputElement>(null);
   const [searchData, handleSearch, handleSubmit] = useInput();
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
+  //초기 로딩 검색창 포커스
   useEffect(() => {
-    if (ref.current) {
-      ref.current.focus(); // ref.current가 null이 아니면 focus() 호출
+    if (!searchData) {
+      searchInputRef.current?.focus()
     }
-  });
+  }, []);
 
-  return (
+  return(
     <form onSubmit={handleSubmit}>
       <StyledInput
-        onChange={handleSearch}
         type="text"
-        placeholder="Search for the Pokemon you want."
+        placeholder="포켓몬을 이름을 입력해주세요."
         value={searchData} // input 값은 state로 관리
+        ref={searchInputRef}
+        onChange={handleSearch}
       />
-      <ButtonStyle />
+      <StyledButton />
     </form>
   );
 };

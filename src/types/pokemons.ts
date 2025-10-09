@@ -1,11 +1,14 @@
 //포켓몬 데이터
 export interface Pokemon {
-  name: string;
-  imageUrl: string;
   id: number;
-  types: string[];
+  name: string;
   description: string;
+  imageUrl: string;
+  types: string;
 }
+
+
+//---
 
 export interface Language {
   name: string;

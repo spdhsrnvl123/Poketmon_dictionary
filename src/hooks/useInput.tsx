@@ -1,14 +1,15 @@
-import { useDispatch } from "react-redux";
-import { useRef, useState } from "react";
-import { setSearchResults } from "../store/search";
+import { useContext, useRef, useState } from "react";
+import { PokemonContext } from "../context/PokemonContext";
 
 export const useInput = () :[
   string,
   (e: React.ChangeEvent<HTMLInputElement>) => void,
   (e: React.FormEvent<HTMLFormElement>) => void
 ] => {
+  const context = useContext(PokemonContext);
+  //확인하기(코파일럿 수정)
+  const { setSearchQuery } = context || {};
   const [searchData, setSearchData] = useState("");
-  const dispatch = useDispatch();
 
   const ref = useRef<HTMLInputElement>(null);
 
@@ -24,7 +25,10 @@ export const useInput = () :[
   // 텍스트 조회
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(setSearchResults(searchData));
+    //확인하기(코파일럿 수정)
+    if (setSearchQuery) {
+      setSearchQuery(searchData);
+    }
     if (ref.current) {
       ref.current.blur();
     }

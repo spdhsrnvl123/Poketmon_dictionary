@@ -2,38 +2,7 @@ import { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../store/store";
 import ReactApexChart from "react-apexcharts";
-import { getPokemonDetailData } from "../../store/pokemonsDetail";
-import loadingImg from "../../assets/images/loading.gif";
-
-
-interface ApexChartOptions {
-  chart: {
-    height: number;
-    type: "radar";
-    toolbar: {
-      show: boolean;
-    }
-  };
-  yaxis: {
-    stepSize: number;
-  };
-  xaxis: {
-    categories: string[];
-  };
-}
-
-interface Series {
-  name: string;
-  data: number[];
-}
-
-interface State {
-  series: Series[];
-  options: ApexChartOptions;
-}
 
 const Title = styled.div`
   font-size: 30px;
@@ -85,98 +54,17 @@ const LoadingImg = styled.img`
 
 function PokemonsDetailPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
   let { poketmonId } = useParams();
-  const data = useSelector((state: RootState) => state);
 
-  useEffect(() => {
-    if (typeof poketmonId === "string") {
-      dispatch(getPokemonDetailData(poketmonId));
-    }
-  }, [dispatch, poketmonId]);
-
-  const pokemonName = data.pokemonDetailData.value?.name || (
-    <LoadingImg src={loadingImg} alt="loading" />
-  );
-
-  // stats 데이터를 차트 데이터로 변환
-  const stats = data.pokemonDetailData.value?.stats || {};
-  const categories = [
-    "Attack",
-    "Defense",
-    "HP",
-    "Special Attack",
-    "Special Defense",
-    "Speed",
-  ];
-  const statValues = [
-    stats.attack || 0,
-    stats.defense || 0,
-    stats.hp || 0,
-    stats.specialAttack || 0,
-    stats.specialDefense || 0,
-    stats.speed || 0,
-  ];
-
-  const [state, setState] = useState<State>({
-    series: [
-      {
-        name: "Stats",
-        data: statValues,
-      },
-    ],
-    options: {
-      chart: {
-        height: 350,
-        type: "radar",
-        toolbar: {
-          show: false, // 🔹 햄버거 메뉴 제거
-        },
-      },
-      yaxis: {
-        stepSize: 30,
-      },
-      xaxis: {
-        categories: categories,
-      },
-    },
-  });
-
-  useEffect(() => {
-    if (data.pokemonDetailData.value) {
-      const stats = data.pokemonDetailData.value.stats || {};
-      const statValues = [
-        stats.attack || 0,
-        stats.defense || 0,
-        stats.hp || 0,
-        stats.specialAttack || 0,
-        stats.specialDefense || 0,
-        stats.speed || 0,
-      ];
-      setState((prevState) => ({
-        ...prevState,
-        options: {
-          ...prevState.options,
-        },
-        series: [{ name: "Stats", data: statValues }],
-      }));
-    }
-  }, [data.pokemonDetailData.value]);
-
-  const item = data.pokemonData.value.filter((v) => {
-    return v.name === pokemonName;
-  });
 
   return (
     <Modal>
-      <Title>{pokemonName}</Title>
-      <Description>{item[0]?.description}</Description>
-      <Img src={item[0]?.imageUrl} alt="" />
+      {/* <Title>{pokemonName}</Title> */}
+      {/* <Description>{item[0]?.description}</Description> */}
+      {/* <Img src={item[0]?.imageUrl} alt="" /> */}
       <Stats>Stats</Stats>
       <div id="chart">
         <ReactApexChart
-          options={state.options}
-          series={state.series}
           type="radar"
           height={300}
         />

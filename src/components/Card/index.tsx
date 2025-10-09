@@ -7,34 +7,18 @@ const List = styled.li`
   align-items: center;
   box-shadow: -1px 2px 5px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
-  margin: 22px;
+  margin: 18px;
   cursor: pointer;
   max-width: 334px;
   height: 80px;
   border-radius: 10px;
-  border-top-left-radius: 0px;
   position: relative;
-`;
-
-const TitleJob = styled.div<{ index: any }>`
-  margin-left: 2px;
-  padding: 0 5px;
-  ::before {
-    content: "${(props) => props.index}";
-    position: absolute;
-    left: 0%;
-    top: -24%;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 10px;
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-  }
 `;
 
 const Content = styled.div`
   display: flex;
   align-items: center;
+  padding-left: 5px;
   img {
     width: 60px;
     height: 60px;
@@ -46,6 +30,20 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     margin-left: 21px;
+    .content {
+      display: flex;
+      justify-content: space-between;
+    }
+    .no {
+      background-color: #99d88c;
+      border-bottom-left-radius: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      padding: 3px;
+      /* padding-right: 5px; */
+    }
     .name {
       font-size: 16px;
       font-weight: bold;
@@ -58,48 +56,33 @@ const Content = styled.div`
   }
 `;
 
-interface CardProps {
-  item: Pokemon; // item은 Pokemon 타입
-  index: number;
-}
+const Card = ({ value }) => {
+  // const navigate = useNavigate();
 
-const Card = ({ item, index }: CardProps) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`poketmon/${item.id}`);
-  };
-
-  const indexNumber = (index: number) => {
-    if (index < 9) {
-      return `00${index + 1}`;
-    } else if (index < 99) {
-      return `0${index + 1}`;
-    } else {
-      return index + 1;
-    }
-  };
+  // const handleClick = () => {
+  //   navigate(`poketmon/${item.id}`);
+  // };
 
   return (
     <>
-      <List onClick={handleClick}>
-        <TitleJob index={indexNumber(index)}>
-          <Content>
-            <img src={item.imageUrl} alt="" />
-            <div className="description">
+      {/* <List onClick={handleClick}> */}
+      <List>
+        <Content>
+          <img src={value.imageUrl} alt="" />
+          <div className="description">
+            <div className="content">
               <a href="#none" className="name">
-                {item.name}
+                {value.name}
               </a>
-              <span>{item.types.join(",")}</span>
-              <p>
-                {item.description.length > 70
-                  ? item.description.slice(0, 70) + "..."
-                  : item.description}
-              </p>
+              <p className="no">No.{value.id}</p>
             </div>
-          </Content>
-        </TitleJob>
+            <span>{value.types}</span>
+            <span></span>
+            <p>{value.description}</p>
+          </div>
+        </Content>
       </List>
+      {/* </List> */}
     </>
   );
 };
