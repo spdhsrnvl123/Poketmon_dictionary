@@ -1,20 +1,17 @@
 import GlobalStyle from "./assets/styles/GlobalStyle";
-import Router from "./router/router";
 import Header from "./components/common/Header";
-import SearchBar from "./components/common/SearchBar";
+// import SearchBar from "./components/common/SearchBar";
 import Category from "./components/common/Category";
-import { PokemonProvider } from "./context/PokemonContext";
+import PokemonListPage from "./pages/PokemonListPage/\bPokemonPage";
 
 function App() {
   return (
     <>
       <GlobalStyle />
       <Header />
-      <PokemonProvider>
-        <SearchBar />
+        {/* <SearchBar /> */}
         <Category />
-        <Router />
-      </PokemonProvider>
+        <PokemonListPage />
     </>
   );
 }

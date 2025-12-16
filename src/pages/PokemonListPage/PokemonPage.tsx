@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import Card from "../../components/Card";
 import { useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
-import { useFilter } from "../../hooks/useFilter";
+import { useSupabasePokemon } from "../../api/useSupabasePokemon.ts";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -32,7 +31,8 @@ const UpButtonStyle = styled.button`
 
 const PokemonListPage = () => {
   const mainContentRef = useRef<HTMLDivElement>(null);
-  const { filteredData, count } = useFilter();
+  // const { filteredData, count } = useFilter();
+  // console.log(filteredData);
 
   //맨 위로 올리기
   const handleScrollToTop = (): void => {
@@ -41,15 +41,18 @@ const PokemonListPage = () => {
     }
   };
 
+  const data = useSupabasePokemon();
+  console.log(data);
+
   return (
     <>
       <StyledContainer>
         <ContentArticle ref={mainContentRef}>
-          <ul>
+          {/* <ul>
             {filteredData?.map((value) => (
               <Card key={value.id} value={value} />
             ))}
-          </ul>
+          </ul> */}
           {/* <Outlet /> */}
           <UpButtonStyle onClick={handleScrollToTop}>
             <FontAwesomeIcon icon={faChevronUp} size="2x" />

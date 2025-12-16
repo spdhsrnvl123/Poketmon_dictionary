@@ -1,5 +1,5 @@
 {
-  "homepage": "https://spdhsrnvl123.github.io/poketmon_dictionary",
+  "homepage": "https://spdhsrnvl123.github.io/Pokedex/",
   "name": "client",
   "version": "0.1.0",
   "private": true,
@@ -30,7 +30,8 @@
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.6",
     "swiper": "^11.2.2",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.9"
   },
   "scripts": {
     "start": "react-scripts start",
